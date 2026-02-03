@@ -1,6 +1,13 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { generatePageMetadata } from '@/lib/metadata';
+
+export const metadata = generatePageMetadata({
+    title: 'Aprenda o Método Trachtenberg',
+    description: 'Guia completo para aprender o Método Trachtenberg de cálculo mental rápido. Técnicas, história e tutoriais passo a passo para dominar a multiplicação mental.',
+    path: '/blog',
+});
 
 export default function BlogIndex() {
     return (

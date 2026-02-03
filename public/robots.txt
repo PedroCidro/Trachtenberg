@@ -1,0 +1,6 @@
+# Trachtenberg.com.br Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://trachtenberg.com.br/sitemap.xml

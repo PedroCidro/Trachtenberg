@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import RuleHint from '@/components/RuleHint';
 import Trachtenberg, { Multiplier } from '@/lib/trachtenberg';
 import useTraining from '@/hooks/useTraining';
 
@@ -153,6 +154,8 @@ function TrainingContent() {
                     <span>Sair</span>
                 </div>
             </div>
+
+            <RuleHint multiplier={multiplier} />
         </div>
     );
 }

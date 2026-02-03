@@ -3,6 +3,14 @@ import Image from 'next/image';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { generatePageMetadata } from '@/lib/metadata';
+
+export const metadata = generatePageMetadata({
+    title: 'A História de Jakow Trachtenberg',
+    description: 'Conheça a incrível história de Jakow Trachtenberg, o gênio que desenvolveu o sistema de cálculo mental rápido enquanto prisioneiro em um campo de concentração nazista.',
+    path: '/blog/historia',
+    type: 'article',
+});
 
 export default function HistoryPage() {
     return (
