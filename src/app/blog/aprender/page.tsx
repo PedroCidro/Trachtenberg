@@ -344,17 +344,23 @@ export default function LearnPage() {
                     <div className="example-box">
                         <div className="example-box__title">Regra</div>
                         <div className="example-box__content">
-                            Dobre o dígito, adicione metade do vizinho. Se ímpar, adicione 5.
+                            Subtraia o dígito de 10 (ou 9), dobre e adicione metade do vizinho. Se ímpar, adicione 5.
                         </div>
                     </div>
+
+                    <h3>Passos:</h3>
+                    <ol>
+                        <li><strong>Primeiro dígito:</strong> (10 - dígito) × 2 + 5 se ímpar</li>
+                        <li><strong>Meio:</strong> (9 - dígito) × 2 + metade vizinho + 5 se ímpar</li>
+                    </ol>
 
                     <h3>Exemplo: 21 × 3</h3>
                     <div className="example-box">
                         <div className="example-box__content">
                             Número: 021<br /><br />
-                            • 1 → 1×2=2 + (0÷2)=0, ímpar → 2+5 = <strong>7</strong> (carry 0)<br />
-                            • 2 → 2×2=4 + (1÷2)=0, par → <strong>4</strong> (carry 0)<br />
-                            • 0 → 0×2=0 + (2÷2)=1, par → <strong>1</strong> (carry 0) → mas é 0, então descarte<br /><br />
+                            • 1 → (10-1)×2 = 18. +0(metade viz) = 18. Ímpar +5 = 23 → <strong>3</strong> (carry 2)<br />
+                            • 2 → (9-2)×2 = 14. +0(metade viz) = 14. Par. +Carry(2) = 16 → <strong>6</strong> (carry 1)<br />
+                            • 0 → (9-0)×2 = 18. +1(metade viz) = 19. Par. +Carry(1) = 20 → <strong>0</strong> (discard excess)<br /><br />
                             Resultado: <strong>63</strong> ✓
                         </div>
                     </div>
@@ -371,16 +377,15 @@ export default function LearnPage() {
                     <div className="example-box">
                         <div className="example-box__title">Regra</div>
                         <div className="example-box__content">
-                            Dobre o dígito, adicione metade do vizinho, adicione 5 se ímpar. Similar ao ×3.
+                            Dobre o dígito e some metade do vizinho. Se o dígito for ímpar, some 5.
                         </div>
                     </div>
 
                     <h3>Passos:</h3>
                     <ol>
                         <li>Dobre o dígito</li>
-                        <li>Adicione metade do vizinho</li>
+                        <li>Adicione metade do vizinho (sem decimais)</li>
                         <li>Se o dígito atual for ímpar, adicione 5</li>
-                        <li>Adicione o vizinho inteiro também (diferença do ×3)</li>
                     </ol>
 
                     <Link href="/treino?m=7&min=2&max=3" className="btn btn--primary">
@@ -395,15 +400,15 @@ export default function LearnPage() {
                     <div className="example-box">
                         <div className="example-box__title">Regra</div>
                         <div className="example-box__content">
-                            Subtraia de 10 (complemento), dobre, e adicione o vizinho.
+                            Subtraia de 10 (complemento) e adicione o vizinho. Se ímpar, adicione 5.
                         </div>
                     </div>
 
                     <h3>Passos:</h3>
                     <ol>
                         <li>Calcule o complemento: (10 - dígito)</li>
-                        <li>Dobre o complemento</li>
                         <li>Adicione o vizinho</li>
+                        <li>Se o dígito for ímpar, adicione 5</li>
                     </ol>
 
                     <Link href="/treino?m=4&min=2&max=3" className="btn btn--primary">
@@ -418,9 +423,15 @@ export default function LearnPage() {
                     <div className="example-box">
                         <div className="example-box__title">Regra</div>
                         <div className="example-box__content">
-                            Subtraia de 9 e adicione o vizinho. Para o primeiro dígito, subtraia de 10.
+                            Subtraia de 10 (ou 9), dobre o resultado e adicione o vizinho.
                         </div>
                     </div>
+
+                    <h3>Passos:</h3>
+                    <ol>
+                        <li><strong>Primeiro dígito:</strong> (10 - dígito) × 2 + vizinho</li>
+                        <li><strong>Outros:</strong> (9 - dígito) × 2 + vizinho</li>
+                    </ol>
 
                     <Link href="/treino?m=8&min=2&max=3" className="btn btn--primary">
                         Praticar ×8 →

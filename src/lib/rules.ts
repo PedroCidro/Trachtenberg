@@ -17,20 +17,21 @@ export const multiplierRules: Record<Multiplier, MultiplierRule> = {
     },
     3: {
         title: 'Multiplicar por 3',
-        rule: 'Dobre o dígito, adicione metade do vizinho. Se ímpar, adicione 5.',
+        rule: 'Subtraia de 10 (ou 9), dobre o resultado e adicione 5 se ímpar.',
         steps: [
-            'Dobre o dígito atual',
-            'Adicione metade do vizinho (ignore frações)',
-            'Se o dígito for ímpar, adicione 5'
+            'Primeiro dígito: (10 - dígito) × 2',
+            'Outros dígitos: (9 - dígito) × 2',
+            'Adicione metade do vizinho',
+            'Se ímpar, adicione 5'
         ]
     },
     4: {
         title: 'Multiplicar por 4',
-        rule: 'Subtraia de 10 (complemento), dobre, e adicione o vizinho.',
+        rule: 'Subtraia o dígito de 10 e adicione o vizinho. Se ímpar, +5.',
         steps: [
             'Calcule (10 - dígito)',
-            'Dobre o resultado',
-            'Adicione o vizinho'
+            'Adicione o vizinho',
+            'Se o dígito for ímpar, adicione 5'
         ]
     },
     5: {
@@ -52,21 +53,20 @@ export const multiplierRules: Record<Multiplier, MultiplierRule> = {
     },
     7: {
         title: 'Multiplicar por 7',
-        rule: 'Dobre + metade do vizinho + vizinho inteiro. Se ímpar, +5.',
+        rule: 'Dobre o dígito e some metade do vizinho. Se ímpar, some 5.',
         steps: [
             'Dobre o dígito',
-            'Adicione metade do vizinho',
-            'Adicione o vizinho inteiro',
-            'Se ímpar, adicione 5'
+            'Adicione metade do vizinho (sem decimais)',
+            'Se o dígito for ímpar, adicione 5'
         ]
     },
     8: {
         title: 'Multiplicar por 8',
-        rule: 'Subtraia de 9, adicione o vizinho. Se primeiro ou dígito > vizinho, subtraia de 10.',
+        rule: 'Subtraia de 10 (ou 9), dobre o resultado e adicione o vizinho.',
         steps: [
-            '(9 - dígito) + vizinho',
-            'Se primeiro dígito: (10 - dígito)',
-            'Se dígito > vizinho: use 10 ao invés de 9'
+            'Primeiro dígito: (10 - dígito) × 2',
+            'Outros dígitos: (9 - dígito) × 2',
+            'Adicione o vizinho'
         ]
     },
     9: {
