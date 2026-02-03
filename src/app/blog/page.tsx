@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AdBanner from '@/components/AdBanner';
 import { generatePageMetadata } from '@/lib/metadata';
 
 export const metadata = generatePageMetadata({
@@ -78,10 +79,8 @@ export default function BlogIndex() {
                     <Link href="/" className="btn btn--primary">Ir para Treino</Link>
                 </div>
 
-                {/* Ad Placeholder */}
-                <div className="ad-placeholder ad-placeholder--banner">
-                    Espaço reservado para AdSense
-                </div>
+                {/* AdSense */}
+                <AdBanner format="horizontal" />
             </main>
 
             <Footer />

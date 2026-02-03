@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AdBanner from '@/components/AdBanner';
 import { generatePageMetadata } from '@/lib/metadata';
 
 export const metadata = generatePageMetadata({
@@ -131,10 +132,8 @@ export default function HistoryPage() {
                     matemática — é um testemunho da resiliência do espírito humano.
                 </p>
 
-                {/* Ad Placeholder */}
-                <div className="ad-placeholder ad-placeholder--banner">
-                    Espaço reservado para AdSense
-                </div>
+                {/* AdSense */}
+                <AdBanner format="horizontal" />
 
                 {/* Navigation to next section */}
                 <div className="card card--hover" style={{ margin: 'var(--space-8) 0' }}>

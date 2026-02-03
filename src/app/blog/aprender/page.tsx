@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MultiplierSection from '@/components/MultiplierSection';
+import AdBanner from '@/components/AdBanner';
 import { generatePageMetadata } from '@/lib/metadata';
 
 export const metadata = generatePageMetadata({
@@ -112,9 +113,7 @@ export default function LearnPage() {
                     <li><strong>×8</strong> — Similar ao ×4</li>
                 </ol>
 
-                <div className="ad-placeholder ad-placeholder--banner">
-                    Espaço reservado para AdSense
-                </div>
+                <AdBanner format="horizontal" />
 
                 {/* Multiplier x11 */}
                 <MultiplierSection id="x11" multiplier="11">
@@ -336,9 +335,7 @@ export default function LearnPage() {
                     </Link>
                 </MultiplierSection>
 
-                <div className="ad-placeholder ad-placeholder--banner">
-                    Espaço reservado para AdSense
-                </div>
+                <AdBanner format="horizontal" />
 
                 {/* Multiplier x3 */}
                 <MultiplierSection id="x3" multiplier="3">
@@ -449,10 +446,8 @@ export default function LearnPage() {
                     <Link href="/" className="btn btn--primary btn--lg">Começar Treino →</Link>
                 </div>
 
-                {/* Ad Placeholder */}
-                <div className="ad-placeholder ad-placeholder--banner">
-                    Espaço reservado para AdSense
-                </div>
+                {/* AdSense */}
+                <AdBanner format="horizontal" />
             </main>
 
             <Footer />
