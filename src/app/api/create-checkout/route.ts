@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { stripe } from '@/lib/stripe';
+import { getStripeServer } from '@/lib/stripe';
 
 export async function POST(request: NextRequest) {
     try {
@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
 
         // Create a Stripe Checkout session with payment mode (one-time for simplicity)
         // To enable PIX: activate it in Stripe Dashboard -> Settings -> Payment Methods
+        const stripe = getStripeServer();
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             payment_method_types: ['card'], // Add 'pix' after enabling in Dashboard
