@@ -5,23 +5,61 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Storage from '@/lib/storage';
-import { getStripe } from '@/lib/stripe-client';
+
+type PlanType = 'monthly' | 'yearly' | 'lifetime';
+
+const plans = {
+    monthly: {
+        name: 'Mensal',
+        price: 'R$ 14,90',
+        period: 'por mês',
+        amount: 1490,
+        duration: 30, // days
+        popular: false,
+    },
+    yearly: {
+        name: 'Anual',
+        price: 'R$ 50',
+        period: 'por ano',
+        amount: 5000,
+        duration: 365, // days
+        popular: true,
+        savings: '72% de economia',
+    },
+    lifetime: {
+        name: 'Vitalício',
+        price: 'R$ 80',
+        period: 'pagamento único',
+        amount: 8000,
+        duration: 36500, // 100 years lol
+        popular: false,
+        badge: '🏆 Melhor valor',
+    },
+};
 
 export default function PremiumPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState<PlanType>('yearly');
 
-    const handleSubscribe = async () => {
+    const handleSubscribe = async (planType: PlanType) => {
         setIsLoading(true);
 
         try {
             const deviceId = Storage.getDeviceId();
+            const plan = plans[planType];
 
             const response = await fetch('/api/create-checkout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ deviceId }),
+                body: JSON.stringify({
+                    deviceId,
+                    planType,
+                    amount: plan.amount,
+                    planName: plan.name,
+                    duration: plan.duration,
+                }),
             });
 
             const data = await response.json();
@@ -61,28 +99,77 @@ export default function PremiumPage() {
                     e domine o Método Trachtenberg.
                 </p>
 
-                <div className="premium-card">
-                    <div className="premium-card__price">R$ 14,90</div>
-                    <div className="premium-card__period">acesso por 30 dias</div>
-
-                    <ul className="premium-card__features">
-                        <li>Exercícios ilimitados por dia</li>
-                        <li>Treino a qualquer hora</li>
-                        <li>Progresso sem interrupções</li>
-                        <li>Apoie o projeto</li>
-                    </ul>
-
-                    <button
-                        className="btn btn--primary btn--lg premium-card__cta"
-                        onClick={handleSubscribe}
-                        disabled={isLoading}
+                <div className="pricing-grid">
+                    {/* Monthly */}
+                    <div
+                        className={`pricing-card ${selectedPlan === 'monthly' ? 'pricing-card--selected' : ''}`}
+                        onClick={() => setSelectedPlan('monthly')}
                     >
-                        {isLoading ? 'Processando...' : 'Assinar Agora'}
-                    </button>
+                        <div className="pricing-card__header">
+                            <h3 className="pricing-card__name">{plans.monthly.name}</h3>
+                        </div>
+                        <div className="pricing-card__price">{plans.monthly.price}</div>
+                        <div className="pricing-card__period">{plans.monthly.period}</div>
+                    </div>
+
+                    {/* Yearly */}
+                    <div
+                        className={`pricing-card pricing-card--popular ${selectedPlan === 'yearly' ? 'pricing-card--selected' : ''}`}
+                        onClick={() => setSelectedPlan('yearly')}
+                    >
+                        <div className="pricing-card__badge">Mais Popular</div>
+                        <div className="pricing-card__header">
+                            <h3 className="pricing-card__name">{plans.yearly.name}</h3>
+                        </div>
+                        <div className="pricing-card__price">{plans.yearly.price}</div>
+                        <div className="pricing-card__period">{plans.yearly.period}</div>
+                        <div className="pricing-card__savings">{plans.yearly.savings}</div>
+                    </div>
+
+                    {/* Lifetime */}
+                    <div
+                        className={`pricing-card ${selectedPlan === 'lifetime' ? 'pricing-card--selected' : ''}`}
+                        onClick={() => setSelectedPlan('lifetime')}
+                    >
+                        <div className="pricing-card__badge pricing-card__badge--gold">🏆 Melhor Valor</div>
+                        <div className="pricing-card__header">
+                            <h3 className="pricing-card__name">{plans.lifetime.name}</h3>
+                        </div>
+                        <div className="pricing-card__price">{plans.lifetime.price}</div>
+                        <div className="pricing-card__period">{plans.lifetime.period}</div>
+                    </div>
                 </div>
+
+                <div className="premium-features">
+                    <h3>Todos os planos incluem:</h3>
+                    <ul className="premium-features__list">
+                        <li>✓ Exercícios ilimitados por dia</li>
+                        <li>✓ Treino a qualquer hora</li>
+                        <li>✓ Progresso sem interrupções</li>
+                        <li>✓ Apoie o desenvolvimento do projeto</li>
+                    </ul>
+                </div>
+
+                <button
+                    className="btn btn--primary btn--lg premium-cta"
+                    onClick={() => handleSubscribe(selectedPlan)}
+                    disabled={isLoading}
+                >
+                    {isLoading ? 'Processando...' : `Assinar Plano ${plans[selectedPlan].name}`}
+                </button>
 
                 <section className="premium-faq">
                     <h2 className="premium-faq__title">Perguntas Frequentes</h2>
+
+                    <div className="premium-faq__item">
+                        <h3 className="premium-faq__question">
+                            Qual a diferença entre os planos?
+                        </h3>
+                        <p className="premium-faq__answer">
+                            Todos os planos oferecem acesso ilimitado. A diferença é apenas na duração:
+                            mensal (30 dias), anual (1 ano) ou vitalício (para sempre).
+                        </p>
+                    </div>
 
                     <div className="premium-faq__item">
                         <h3 className="premium-faq__question">
@@ -111,16 +198,6 @@ export default function PremiumPage() {
                         <p className="premium-faq__answer">
                             Seu progresso e estatísticas são salvos localmente no seu
                             navegador, independente da assinatura.
-                        </p>
-                    </div>
-
-                    <div className="premium-faq__item">
-                        <h3 className="premium-faq__question">
-                            Quantos exercícios posso fazer sem premium?
-                        </h3>
-                        <p className="premium-faq__answer">
-                            Usuários gratuitos podem fazer até 15 exercícios por dia.
-                            O contador reseta à meia-noite.
                         </p>
                     </div>
                 </section>

@@ -12,21 +12,28 @@ function SuccessContent() {
     const router = useRouter();
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
     const sessionId = searchParams.get('session_id');
+    const durationParam = searchParams.get('duration');
+    const duration = durationParam ? parseInt(durationParam, 10) : 30;
+
+    // Format duration for display
+    const getDurationText = () => {
+        if (duration >= 36500) return 'Vitalício (para sempre!)';
+        if (duration >= 365) return '1 ano';
+        return `${duration} dias`;
+    };
 
     useEffect(() => {
         if (sessionId) {
             // Mark user as subscribed in localStorage
-            // In production, you'd verify this with a webhook or API call
             Storage.setSubscription({
                 isSubscribed: true,
-                // Set expiration to 30 days from now for one-time payment
-                expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                expiresAt: new Date(Date.now() + duration * 24 * 60 * 60 * 1000).toISOString(),
             });
             setStatus('success');
         } else {
             setStatus('error');
         }
-    }, [sessionId]);
+    }, [sessionId, duration]);
 
     if (status === 'loading') {
         return (
@@ -71,7 +78,7 @@ function SuccessContent() {
                     <h3 style={{ marginBottom: 'var(--space-4)' }}>Seu acesso Premium</h3>
                     <ul style={{ textAlign: 'left', fontSize: 'var(--text-sm)', color: 'var(--text-secondary)' }}>
                         <li style={{ padding: 'var(--space-2) 0' }}>✓ Exercícios ilimitados por dia</li>
-                        <li style={{ padding: 'var(--space-2) 0' }}>✓ Válido por 30 dias</li>
+                        <li style={{ padding: 'var(--space-2) 0' }}>✓ Válido por: <strong style={{ color: 'var(--accent)' }}>{getDurationText()}</strong></li>
                         <li style={{ padding: 'var(--space-2) 0' }}>✓ Sem interrupções no treino</li>
                     </ul>
                 </div>

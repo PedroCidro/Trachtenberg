@@ -1649,6 +1649,126 @@ p {
     margin: 0 auto var(--space-8);
 }
 
+/* Pricing Grid */
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    max-width: 800px;
+    margin: 0 auto var(--space-6);
+}
+
+@media (max-width: 768px) {
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+    }
+}
+
+.pricing-card {
+    background-color: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.pricing-card:hover {
+    border-color: var(--text-tertiary);
+    transform: translateY(-2px);
+}
+
+.pricing-card--selected {
+    border-color: var(--accent);
+    background: linear-gradient(180deg, rgba(255, 193, 7, 0.1) 0%, transparent 100%);
+}
+
+.pricing-card--popular {
+    transform: scale(1.05);
+}
+
+.pricing-card--popular:hover {
+    transform: scale(1.05) translateY(-2px);
+}
+
+.pricing-card__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #000;
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+
+.pricing-card__badge--gold {
+    background: linear-gradient(135deg, #ffd54f 0%, #ff9800 100%);
+}
+
+.pricing-card__name {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-3);
+}
+
+.pricing-card__price {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--accent);
+    margin-bottom: var(--space-1);
+}
+
+.pricing-card__period {
+    font-size: var(--text-xs);
+    color: var(--text-tertiary);
+}
+
+.pricing-card__savings {
+    font-size: var(--text-xs);
+    color: var(--success);
+    font-weight: var(--font-semibold);
+    margin-top: var(--space-2);
+}
+
+/* Premium Features */
+.premium-features {
+    max-width: 400px;
+    margin: 0 auto var(--space-6);
+    text-align: center;
+}
+
+.premium-features h3 {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-3);
+}
+
+.premium-features__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.premium-features__list li {
+    color: var(--success);
+}
+
+/* Premium CTA Button */
+.premium-cta {
+    margin-bottom: var(--space-8);
+}
+
+/* Keep old premium-card for backwards compatibility */
 .premium-card {
     background-color: var(--bg-secondary);
     border: 2px solid var(--accent);
