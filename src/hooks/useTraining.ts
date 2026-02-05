@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Trachtenberg, { Problem, Multiplier } from '@/lib/trachtenberg';
-import Storage, { SessionResult } from '@/lib/storage';
+import Storage from '@/lib/storage';
+import { canUseExercise, FREE_DAILY_LIMIT } from '@/lib/usageLimit';
 
 export default function useTraining() {
     const [problem, setProblem] = useState<Problem | null>(null);
@@ -12,16 +13,49 @@ export default function useTraining() {
     const [elapsedTime, setElapsedTime] = useState(0);
     const [isActive, setIsActive] = useState(false);
 
-    // Audio feedback (optional, keeping minimal as per request)
+    // Usage limit state
+    const [dailyUsage, setDailyUsage] = useState(0);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [showPaywall, setShowPaywall] = useState(false);
+
+    // Initialize usage state
+    useEffect(() => {
+        const usage = Storage.getDailyUsage();
+        const sub = Storage.getSubscription();
+        setDailyUsage(usage.count);
+        setIsSubscribed(sub.isSubscribed);
+    }, []);
 
     const generateNewProblem = useCallback((multiplier: Multiplier | 'all', min: number, max: number) => {
+        // Check if user can continue
+        const currentUsage = Storage.getDailyUsage().count;
+        const sub = Storage.getSubscription();
+
+        if (!canUseExercise(currentUsage, sub.isSubscribed)) {
+            setShowPaywall(true);
+            return;
+        }
+
         const newProblem = Trachtenberg.generateProblem(multiplier, min, max);
         setProblem(newProblem);
         setInputValue('');
         setFeedback(null);
+        setShowPaywall(false);
     }, []);
 
     const startSession = useCallback((multiplier: Multiplier | 'all', min: number, max: number) => {
+        // Check limit before starting
+        const currentUsage = Storage.getDailyUsage().count;
+        const sub = Storage.getSubscription();
+        setDailyUsage(currentUsage);
+        setIsSubscribed(sub.isSubscribed);
+
+        if (!canUseExercise(currentUsage, sub.isSubscribed)) {
+            setShowPaywall(true);
+            setIsActive(true); // Still mark as active so UI renders
+            return;
+        }
+
         setCorrectCount(0);
         setIncorrectCount(0);
         setElapsedTime(0);
@@ -34,6 +68,10 @@ export default function useTraining() {
         if (!problem) return;
 
         const isCorrect = Trachtenberg.validateAnswer(inputValue, problem.answer);
+
+        // Increment daily usage on every attempt (correct or incorrect)
+        const newUsage = Storage.incrementDailyUsage();
+        setDailyUsage(newUsage);
 
         if (isCorrect) {
             setFeedback('correct');
@@ -49,9 +87,7 @@ export default function useTraining() {
             // Don't auto-advance on incorrect, let them see
             setTimeout(() => {
                 setFeedback(null);
-                setInputValue(''); // Clear input to retry? Or keep? Monkeytype usually clears or shakes
-                // For Trachtenberg usually we show the correct answer then next
-                // But let's just show feedback and clear
+                setInputValue('');
                 generateNewProblem(multiplier, min, max);
             }, 1500);
         }
@@ -70,9 +106,18 @@ export default function useTraining() {
 
     // Skip problem
     const skipProblem = useCallback((multiplier: Multiplier | 'all', min: number, max: number) => {
-        setIncorrectCount(prev => prev + 1); // Count as incorrect? Or just skip? Usually skip doesn't count or counts as miss. Let's count as miss for simplicity.
+        setIncorrectCount(prev => prev + 1);
         generateNewProblem(multiplier, min, max);
     }, [generateNewProblem]);
+
+    // Dismiss paywall (for when subscription is successful)
+    const dismissPaywall = useCallback(() => {
+        const sub = Storage.getSubscription();
+        setIsSubscribed(sub.isSubscribed);
+        if (sub.isSubscribed) {
+            setShowPaywall(false);
+        }
+    }, []);
 
     return {
         problem,
@@ -85,6 +130,12 @@ export default function useTraining() {
         startSession,
         submitAnswer,
         skipProblem,
-        isActive
+        isActive,
+        // New usage limit exports
+        dailyUsage,
+        isSubscribed,
+        showPaywall,
+        dismissPaywall,
+        remainingExercises: isSubscribed ? 'unlimited' : Math.max(0, FREE_DAILY_LIMIT - dailyUsage)
     };
 }

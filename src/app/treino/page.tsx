@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RuleHint from '@/components/RuleHint';
+import UsageIndicator from '@/components/UsageIndicator';
+import Paywall from '@/components/Paywall';
 import Trachtenberg, { Multiplier } from '@/lib/trachtenberg';
 import useTraining from '@/hooks/useTraining';
 
@@ -34,7 +36,11 @@ function TrainingContent() {
         startSession,
         submitAnswer,
         skipProblem,
-        isActive
+        isActive,
+        // Usage limit state
+        dailyUsage,
+        isSubscribed,
+        showPaywall
     } = useTraining();
 
     // Start on mount
@@ -44,10 +50,10 @@ function TrainingContent() {
 
     // Focus input when problem changes
     useEffect(() => {
-        if (problem && inputRef.current) {
+        if (problem && inputRef.current && !showPaywall) {
             inputRef.current.focus();
         }
-    }, [problem]);
+    }, [problem, showPaywall]);
 
     // Handle keyboard submission
     const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -61,6 +67,15 @@ function TrainingContent() {
         }
     };
 
+    // Show paywall if limit reached
+    if (showPaywall) {
+        return (
+            <div className="container page-training">
+                <Paywall dailyUsage={dailyUsage} />
+            </div>
+        );
+    }
+
     if (!isActive || !problem) return <div className="flex-center" style={{ height: '100vh' }}>Carregando...</div>;
 
     return (
@@ -70,8 +85,11 @@ function TrainingContent() {
                     <span>←</span>
                     <span>Voltar</span>
                 </Link>
-                <div className="training-header__info">
-                    Multiplicando por <strong>{multiplier === 'all' ? 'Todos' : `×${multiplier}`}</strong>
+                <div className="training-header__center">
+                    <div className="training-header__info">
+                        Multiplicando por <strong>{multiplier === 'all' ? 'Todos' : `×${multiplier}`}</strong>
+                    </div>
+                    <UsageIndicator dailyUsage={dailyUsage} isSubscribed={isSubscribed} />
                 </div>
                 <Link href="/estatisticas" className="training-header__back">
                     <span>Estatísticas</span>

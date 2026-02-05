@@ -30,6 +30,12 @@ export default function Header() {
                 >
                     Aprender
                 </Link>
+                <Link
+                    href="/premium"
+                    className={`header__link header__link--premium ${pathname.startsWith('/premium') ? 'header__link--active' : ''}`}
+                >
+                    ⭐ Premium
+                </Link>
             </nav>
         </header>
     );
