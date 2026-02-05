@@ -6,40 +6,31 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Storage from '@/lib/storage';
 
-type PlanType = 'monthly' | 'yearly' | 'lifetime';
+type PlanType = 'monthly' | 'lifetime';
 
 const plans = {
     monthly: {
         name: 'Mensal',
-        price: 'R$ 14,90',
+        price: 'R$ 10',
         period: 'por mês',
-        amount: 1490,
+        amount: 1000,
         duration: 30, // days
         popular: false,
     },
-    yearly: {
-        name: 'Anual',
-        price: 'R$ 50',
-        period: 'por ano',
-        amount: 5000,
-        duration: 365, // days
-        popular: true,
-        savings: '72% de economia',
-    },
     lifetime: {
         name: 'Vitalício',
-        price: 'R$ 80',
+        price: 'R$ 40',
         period: 'pagamento único',
-        amount: 8000,
-        duration: 36500, // 100 years lol
-        popular: false,
-        badge: '🏆 Melhor valor',
+        amount: 4000,
+        duration: 36500, // 100 years
+        popular: true,
+        badge: '🏆 Melhor Valor',
     },
 };
 
 export default function PremiumPage() {
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedPlan, setSelectedPlan] = useState<PlanType>('yearly');
+    const [selectedPlan, setSelectedPlan] = useState<PlanType>('lifetime');
 
     const handleSubscribe = async (planType: PlanType) => {
         setIsLoading(true);
@@ -99,7 +90,7 @@ export default function PremiumPage() {
                     e domine o Método Trachtenberg.
                 </p>
 
-                <div className="pricing-grid">
+                <div className="pricing-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', maxWidth: '600px' }}>
                     {/* Monthly */}
                     <div
                         className={`pricing-card ${selectedPlan === 'monthly' ? 'pricing-card--selected' : ''}`}
@@ -110,20 +101,6 @@ export default function PremiumPage() {
                         </div>
                         <div className="pricing-card__price">{plans.monthly.price}</div>
                         <div className="pricing-card__period">{plans.monthly.period}</div>
-                    </div>
-
-                    {/* Yearly */}
-                    <div
-                        className={`pricing-card pricing-card--popular ${selectedPlan === 'yearly' ? 'pricing-card--selected' : ''}`}
-                        onClick={() => setSelectedPlan('yearly')}
-                    >
-                        <div className="pricing-card__badge">Mais Popular</div>
-                        <div className="pricing-card__header">
-                            <h3 className="pricing-card__name">{plans.yearly.name}</h3>
-                        </div>
-                        <div className="pricing-card__price">{plans.yearly.price}</div>
-                        <div className="pricing-card__period">{plans.yearly.period}</div>
-                        <div className="pricing-card__savings">{plans.yearly.savings}</div>
                     </div>
 
                     {/* Lifetime */}
